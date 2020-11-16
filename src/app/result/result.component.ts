@@ -15,6 +15,7 @@ export class ResultComponent implements OnInit {
   // emoji image path
   emojiPath: string;
   userName: string;
+  timeStamp;
 
   constructor(private route: ActivatedRoute, private httpClient: HttpClient) {
   }
@@ -22,9 +23,10 @@ export class ResultComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((data) => {
       console.log(data.userName);
+      this.timeStamp = new Date().getTime();
       this.userName = data.userName;
-      this.wordCloudPath = `http://localhost:8080/wordcloud?id=${this.userName}`;
-      this.emojiPath = `http://localhost:8080/emojicloud?id=${this.userName}`;
+      this.wordCloudPath = `http://localhost:8080/wordcloud?id=${this.userName}&uuid=${this.timeStamp}`;
+      this.emojiPath = `http://localhost:8080/emojicloud?id=${this.userName}&uuid=${this.timeStamp}`;
     });
   }
 }

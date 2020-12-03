@@ -14,6 +14,8 @@ export class ResultComponent implements OnInit {
   wordCloudPath: string;
   // emoji image path
   emojiPath: string;
+  relationshipPath: string;
+  trendPath: string;
   userName: string;
   timeStamp;
 
@@ -22,11 +24,15 @@ export class ResultComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((data) => {
-      console.log(data.userName);
       this.timeStamp = new Date().getTime();
       this.userName = data.userName;
-      this.wordCloudPath = `http://localhost:8080/wordcloud?id=${this.userName}&uuid=${this.timeStamp}`;
-      this.emojiPath = `http://localhost:8080/emojicloud?id=${this.userName}&uuid=${this.timeStamp}`;
+      this.httpClient.get(`http://localhost:8080/restore?id=${this.userName}&uuid=${this.timeStamp}`).subscribe(() => {
+        console.log('success store');
+        this.wordCloudPath = `http://localhost:8080/wordcloud?id=${this.userName}&uuid=${this.timeStamp}`;
+        this.emojiPath = `http://localhost:8080/emojicloud?id=${this.userName}&uuid=${this.timeStamp}`;
+        this.relationshipPath = `http://localhost:8080/relationgraph?id=${this.userName}&uuid=${this.timeStamp}`;
+        this.trendPath = `http://localhost:8080/trendchart?id=${this.userName}&uuid=${this.timeStamp}`;
+      });
     });
   }
 }
